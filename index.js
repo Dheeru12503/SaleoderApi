@@ -1,16 +1,27 @@
 const express = require("express");
-const cors = require("cors");
+const fs = require("fs");
+const path = require("path");
 const app = express();
-app.use(cors());
 const port = process.env.PORT || 5000;
 
-const apiData = require("./data.json");
+// Load data from JSON files
+const saleOrders = JSON.parse(
+  fs.readFileSync(path.join(__dirname, "saleorder.json"), "utf8")
+);
+const productList = JSON.parse(
+  fs.readFileSync(path.join(__dirname, "product.json"), "utf8")
+);
 
-app.get("/saleorders", (req, res) => {
-  res.send(apiData);
+// Endpoint for sale orders
+app.get("/api/saleOrders", (req, res) => {
+  res.json(saleOrders);
 });
 
+// Endpoint for product list
+app.get("/api/product", (req, res) => {
+  res.json(productList);
+});
 
-app.listen(port,()=> {
-    console.log(" i am live ");
-})
+app.listen(port, () => {
+  console.log(`API listening at http://localhost:${port}`);
+});
